@@ -15,7 +15,7 @@
               label="E-mail*"
               name="username"
               type="text"
-              prepend-inner-icon="mdi-face"
+              prepend-inner-icon="person"
               required
               v-model="email"
               :rules="emailRules"

@@ -14,7 +14,7 @@
                                 label="First Name"
                                 name="first_name"
                                 type="text"
-                                prepend-inner-icon="mdi-face"
+                                prepend-inner-icon="person"
                                 required
                                 v-model="name"
                         ></v-text-field>
@@ -22,7 +22,7 @@
                                 label="Last Name"
                                 name="last_name"
                                 type="text"
-                                prepend-inner-icon="mdi-face"
+                                prepend-inner-icon="person"
                                 required
                                 v-model="name"
                         ></v-text-field>
@@ -30,7 +30,7 @@
                                 label="E-mail*"
                                 name="username"
                                 type="text"
-                                prepend-inner-icon="mdi-face"
+                                prepend-inner-icon="email"
                                 required
                                 v-model="email"
                                 :rules="emailRules"
@@ -57,7 +57,7 @@
                                 label="Job Title"
                                 name="job_title"
                                 type="text"
-                                prepend-inner-icon="mdi-face"
+                                prepend-inner-icon="work"
                                 required
                                 v-model="name"
                         ></v-text-field>

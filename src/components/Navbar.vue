@@ -124,6 +124,12 @@ export default {
     if(this.$route.path === "/home"){
       this.isLoggedIn = true;
     }
+    if(this.$route.path === "/events"){
+        this.isLoggedIn = true;
+    }
+    if(this.$route.path === "/staff"){
+        this.isLoggedIn = true;
+    }
   },
   components: {
       LoginDialog,

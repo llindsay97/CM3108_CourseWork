@@ -1,18 +1,19 @@
 <template>
     <v-container fluid>
         <v-layout>
-            <h1>Events</h1>
-            <AddEvent/>
+            <EventsTable/>
         </v-layout>
+        <br>
     </v-container>
 </template>
 
 <script>
-    import AddEvent from "../components/AddEvent";
+    import EventsTable from "../components/EventsTable";
+
     export default {
         name: "Events",
         components: {
-            AddEvent
+            EventsTable
         }
     }
 </script>

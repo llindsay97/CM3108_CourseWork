@@ -46,11 +46,11 @@
                         ></v-text-field>
                         <v-text-field
                                 label="Confirm Password*"
-                                name="password"
+                                name="confirmPassword"
                                 type="password"
                                 prepend-inner-icon="mdi-lock"
                                 required
-                                v-model="password"
+                                v-model="confirmPassword"
                                 :rules="passwordRules"
                         ></v-text-field>
                         <v-text-field
@@ -83,6 +83,7 @@
             dialog: false,
             email: "",
             password: "",
+            confirmPassword: "",
             rememberMe: false,
             isRegister: false,
 

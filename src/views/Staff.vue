@@ -1,12 +1,20 @@
 <template>
-    <div>
-        <h1>Staff</h1>
-    </div>
+    <v-container fluid>
+        <v-layout>
+            <StaffTable/>
+        </v-layout>
+        <br>
+    </v-container>
 </template>
 
 <script>
+    import StaffTable from "../components/StaffTable";
+
     export default {
-        name: "Staff"
+        name: "Staff",
+        components: {
+            StaffTable
+        }
     }
 </script>
 

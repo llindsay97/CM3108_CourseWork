@@ -4,6 +4,7 @@ import Welcome from "./views/Welcome.vue";
 import Home from "./views/Home.vue";
 import Events from "./views/Events.vue";
 import Staff from "./views/Staff.vue";
+import Help from "./views/Help.vue";
 import store from "./store";
 
 Vue.use(Router);
@@ -31,6 +32,11 @@ const router = new Router({
       path: "/staff",
       name: "staff",
       component: Staff
+    },
+    {
+      path: "/help",
+      name: "help",
+      component: Help
     },
     {
       path: "/about",

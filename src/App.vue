@@ -4,7 +4,7 @@
     <v-content>
       <router-view />
     </v-content>
-    <rgu-footer/>
+    <rgu-footer />
   </v-app>
 </template>
 
@@ -33,6 +33,6 @@ export default {
 };
 </script>
 <style>
-  @import "~vuetify/dist/vuetify.min.css";
-  @import "http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons";
+@import "~vuetify/dist/vuetify.min.css";
+@import "http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons";
 </style>

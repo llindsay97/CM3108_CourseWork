@@ -1,14 +1,8 @@
 <template>
-  <v-dialog v-model="dialog" max-width="600px">
+  <v-dialog v-model="dialog" overlay-color="green" max-width="600px">
     <template v-slot:activator="{ on }">
       <v-btn v-if="!isLoggedIn" color="white" class="font-weight-bold" text v-on="on">Log in</v-btn>
-      <v-btn
-        v-if="isLoggedIn"
-        v-on:click="logOut"
-        color="white"
-        class="font-weight-bold"
-        text
-      >Log out</v-btn>
+      <v-btn v-if="isLoggedIn" v-on:click="logOut" color="white" class="font-weight-bold" text >Log out</v-btn>
     </template>
     <v-card>
       <v-card-title>
@@ -55,11 +49,11 @@ import { mapState, mapActions } from "vuex";
 export default {
   data: () => ({
     //Component data
-    dialog: false,
-    email: "",
-    password: "",
-    rememberMe: false,
-    isLoggedIn: false,
+      dialog: false,
+      email: "",
+      password: "",
+      rememberMe: false,
+      isLoggedIn: false,
 
     //Form rules
     emailRules: [
@@ -72,13 +66,13 @@ export default {
     //Vuex state variables
     ...mapState(["loggingIn", "loginError", "loginSuccessful"])
   },
-  created() {
-    if (this.$route.path === "/") {
-      this.isLoggedIn = false;
-    } else {
-      this.isLoggedIn = true;
-    }
-  },
+    created(){
+        if(this.$route.path === "/"){
+            this.isLoggedIn = false;
+        } else {
+            this.isLoggedIn = true;
+        }
+    },
   methods: {
     //Vuex state actions
     ...mapActions(["doLogin", "doLoginSaveAccess", "getLoginStatus"]),
@@ -91,7 +85,7 @@ export default {
           });
           if (this.getLoginStatus()) {
             resolve("Login successful");
-            this.$router.push({ path: "/home" });
+            this.$router.push({path: "/home"});
           } else {
             reject("Login failed");
           }
@@ -120,13 +114,13 @@ export default {
       if (status) {
         console.log("loggin worked! also hello!");
         this.dialog = false;
-        this.$router.push({ path: "/home" });
-        this.$router.go({ path: this.$router.path });
+        this.$router.push({path: "/home"});
+        this.$router.go({path: this.$router.path});
       }
     },
-    logOut() {
-      this.$router.push({ path: "/" });
-      this.$router.go({ path: this.$router.path });
+    logOut(){
+        this.$router.push({path: "/"});
+        this.$router.go({path: this.$router.path});
     }
   }
 };

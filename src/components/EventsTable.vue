@@ -358,6 +358,8 @@ export default {
           location: "room N533",
           date: "2019-10-23",
           time: "3:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
           tasks: "Client Meeting",
           notes: ""

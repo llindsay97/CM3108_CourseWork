@@ -1,11 +1,10 @@
 <template>
   <div>
-    <rgu-calendar/>
+    <h1>Welcome</h1>
   </div>
 </template>
 
 <script>
-  import Calendar from "../components/Calendar";
 
   export default {
     name: "Welcome",
@@ -14,9 +13,6 @@
 
       }
     },
-    components: {
-      "rgu-calendar": Calendar
-    }
   }
 </script>
 

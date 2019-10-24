@@ -251,9 +251,8 @@
         nativeEvent.stopPropagation()
       },
       updateRange ({ start, end }) {
-        // You could load events from an outside source (like database) now that we have the start and end dates on the calendar
-        this.start = start
-        this.end = end
+        this.start = start;
+        this.end = end;
       },
       nth (d) {
         return d > 3 && d < 21

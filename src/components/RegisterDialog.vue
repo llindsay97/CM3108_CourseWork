@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" overlay-color="green" max-width="600px">
+  <v-dialog v-model="dialog" max-width="600px">
     <template v-slot:activator="{ on }">
       <v-btn v-if="!isRegister" color="white" class="font-weight-bold" text v-on="on">Register</v-btn>
     </template>

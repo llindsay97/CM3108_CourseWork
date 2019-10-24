@@ -3,19 +3,47 @@
     <v-card-title>
       <span
         class="pr-3"
-        style="min-width: 26%;"
-      >Events for {{ months[currentMonth].name }} - {{ currentYear }}</span>
-      <v-btn text icon class="pr-2" v-on:click="goToMonth(-1)">
-        <v-icon>keyboard_arrow_left</v-icon>
+        style="min-width: 10%;
+               font-family: 'Times New Roman', serif;
+               font-size: 32px; margin-top: -10px;"
+      >
+        Events for:
+      </span>
+      <v-select
+        :items="days"
+        placeholder="Day"
+        dense
+        item-text="name"
+        style="max-width: 15%;"
+      ></v-select>
+      <v-select
+        :items="months"
+        placeholder="Month"
+        dense
+        item-text="name"
+        style="max-width: 15%;"
+      ></v-select>
+      <v-select
+        :items="years"
+        placeholder="Year"
+        dense
+        item-text="name"
+        style="max-width: 15%;"
+      ></v-select>
+      <v-btn
+        class="primary"
+        style="margin-top: -15px; margin-left: 10px; margin-right: 10px;"
+      >
+        APPLY
       </v-btn>
-      <v-btn text icon class="pr-1" v-on:click="goToCurrentMonth">
-        <v-icon>today</v-icon>
-      </v-btn>
-      <v-btn text icon v-on:click="goToMonth(1)">
-        <v-icon>keyboard_arrow_right</v-icon>
+      <v-btn
+        class="primary"
+        style="margin-top: -15px;"
+      >
+        RESET
       </v-btn>
       <v-spacer></v-spacer>
-      <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
+      <v-text-field append-icon="search" label="Search" dense single-line v-model="search"></v-text-field>
     </v-card-title>
     <v-data-table
       :height="300"
@@ -28,8 +56,14 @@
       <template v-slot:top>
         <v-dialog v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }">
-            <v-btn color="pink" dark fab fixed right class="rgu-add-btn" v-on="on">
-              <v-icon>mdi-plus</v-icon>
+            <v-btn
+              color="primary"
+              dark
+              fixed
+              right
+              class="rgu-add-btn"
+              v-on="on">
+              <v-icon>add_event</v-icon>
             </v-btn>
           </template>
           <v-card>
@@ -40,10 +74,10 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col class="align-center justify-space-between" cols="12">
-                    <v-text-field v-model="editedItem.name" prepend-icon="event" placeholder="Name"></v-text-field>
+                  <v-col class="align-center justify-space-between" cols="6">
+                    <v-text-field v-model="editedItem.name" prepend-icon="date_range" placeholder="Name"></v-text-field>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="6">
                     <v-text-field
                       v-model="editedItem.location"
                       prepend-icon="place"
@@ -51,16 +85,133 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="6">
-                    <v-text-field v-model="editedItem.date" prepend-icon="today" placeholder="Date"></v-text-field>
+                    <v-menu
+                      ref="date_menu"
+                      v-model="date_menu"
+                      :close-on-content-click="false"
+                      :return-value.sync="editedItem.date"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="editedItem.date"
+                          label="Start Date"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="editedItem.date" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="date_menu = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.date_menu.save(editedItem.date)">OK</v-btn>
+                      </v-date-picker>
+                    </v-menu>
                   </v-col>
                   <v-col cols="6">
-                    <v-text-field v-model="editedItem.time" prepend-icon="watch" placeholder="Time"></v-text-field>
+                    <v-menu
+                      ref="time_menu"
+                      v-model="time_menu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      :return-value.sync="editedItem.time"
+                      transition="scale-transition"
+                      offset-y
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="editedItem.time"
+                          label="Start Time"
+                          prepend-icon="access_time"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="time_menu"
+                        v-model="editedItem.time"
+                        full-width
+                      >
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="time_menu = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.time_menu.save(editedItem.time)">OK</v-btn>
+                      </v-time-picker>
+                    </v-menu>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="6">
+                    <v-menu
+                      ref="end_date_menu"
+                      v-model="end_date_menu"
+                      :close-on-content-click="false"
+                      :return-value.sync="editedItem.end_date"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="editedItem.end_date"
+                          label="End Date"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="editedItem.end_date" no-title scrollable>
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="end_date_menu = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.end_date_menu.save(editedItem.end_date)">OK</v-btn>
+                      </v-date-picker>
+                    </v-menu>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-menu
+                      ref="end_time_menu"
+                      v-model="end_time_menu"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      :return-value.sync="editedItem.end_time"
+                      transition="scale-transition"
+                      offset-y
+                      max-width="290px"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="editedItem.end_time"
+                          label="End Time"
+                          prepend-icon="access_time"
+                          readonly
+                          v-on="on"
+                        ></v-text-field>
+                      </template>
+                      <v-time-picker
+                        v-if="end_time_menu"
+                        v-model="editedItem.end_time"
+                        full-width
+                      >
+                        <v-spacer></v-spacer>
+                        <v-btn text color="primary" @click="end_time_menu = false">Cancel</v-btn>
+                        <v-btn text color="primary" @click="$refs.end_time_menu.save(editedItem.end_time)">OK</v-btn>
+                      </v-time-picker>
+                    </v-menu>
+                  </v-col>
+                  <v-col cols="6">
                     <v-text-field
                       v-model="editedItem.staff"
                       prepend-icon="people"
                       placeholder="Staff"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      v-model="editedItem.tasks"
+                      prepend-icon="work"
+                      placeholder="Tasks"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
@@ -101,8 +252,12 @@ export default {
   data() {
     return {
       dialog: false,
+      date_menu: false,
+      time_menu: false,
+      end_date_menu: false,
+      end_time_menu: false,
+      days: [],
       months: [
-        { name: "Zero", abrev: "ZZZ", index: 0 },
         { name: "January", abrev: "Jan", index: 1 },
         { name: "February", abrev: "Feb", index: 2 },
         { name: "March", abrev: "Mar", index: 3 },
@@ -116,126 +271,143 @@ export default {
         { name: "November", abrev: "Nov", index: 11 },
         { name: "December", abrev: "Dec", index: 12 }
       ],
+      years: this.createYearModel(),
+      tasks: "",
       currentMonth: 10,
       currentYear: 2019,
       search: "",
       snack: false,
       snackColor: "",
       snackText: "",
-      max25chars: v => v.length <= 25 || "Input too long!",
       pagination: {},
       headers: [
         { text: "Name", align: "center", sortable: false, value: "name" },
-        {
-          text: "Location",
-          align: "center",
-          sortable: false,
-          value: "location"
-        },
-        { text: "Date", align: "center", sortable: false, value: "date" },
-        { text: "Time", align: "center", sortable: false, value: "time" },
+        { text: "Location", align: "center", sortable: false,  value: "location"},
+        { text: "Start Date", align: "center", sortable: false, value: "date" },
+        { text: "Start Time", align: "center", sortable: false, value: "time" },
+        { text: "End Date", align: "center", sortable: false, value: "end_date" },
+        { text: "End Time", align: "center", sortable: false, value: "end_time" },
         { text: "Staff", align: "center", sortable: false, value: "staff" },
+        { text: "Tasks", align: "center", sortable: false, value: "tasks" },
         { text: "Actions", sortable: false, value: "action" }
       ],
       items: [
         {
           _id: "1",
-          userId: "AB11",
           name: "Project Management Lecture",
           location: "room N117",
-          date: "October-21",
-          time: "2:00PM",
+          date: "2019-10-23",
+          time: "2:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "2",
-          userId: "AB11",
           name: "Project Management Laboratory",
           location: "room N533",
-          date: "October-21",
-          time: "3:00PM",
+          date: "2019-10-23",
+          time: "3:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "3",
-          userId: "AB11",
           name: "Project Management Lecture",
           location: "room N117",
-          date: "October-21",
-          time: "2:00PM",
+          date: "2019-10-23",
+          time: "2:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "4",
-          userId: "AB11",
           name: "Project Management Laboratory",
           location: "room N533",
-          date: "October-21",
-          time: "3:00PM",
+          date: "2019-10-23",
+          time: "3:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "5",
-          userId: "AB11",
           name: "Project Management Lecture",
           location: "room N117",
-          date: "October-21",
-          time: "2:00PM",
+          date: "2019-10-23",
+          time: "2:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "6",
-          userId: "AB11",
           name: "Project Management Laboratory",
           location: "room N533",
-          date: "October-21",
-          time: "3:00PM",
+          date: "2019-10-23",
+          time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "7",
-          userId: "AB11",
           name: "Project Management Lecture",
           location: "room N117",
-          date: "October-21",
-          time: "2:00PM",
+          date: "2019-10-23",
+          time: "2:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "8",
-          userId: "AB11",
           name: "Project Management Laboratory",
           location: "room N533",
-          date: "October-21",
-          time: "3:00PM",
+          date: "2019-10-23",
+          time: "3:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "9",
-          userId: "AB11",
           name: "Project Management Lecture",
           location: "room N117",
-          date: "October-21",
-          time: "2:00PM",
+          date: "2019-10-23",
+          time: "2:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         },
         {
           _id: "10",
-          userId: "AB11",
           name: "Project Management Laboratory",
           location: "room N533",
-          date: "October-21",
-          time: "3:00PM",
+          date: "2019-10-23",
+          time: "3:00",
+          end_date: "2019-10-23",
+          end_time: "3:00",
           staff: "Tiffany Young",
+          tasks: "Client Meeting",
           notes: ""
         }
       ],
@@ -243,18 +415,27 @@ export default {
       editedItem: {
         name: "",
         location: "",
+        date: "",
         time: "",
+        end_date: "",
+        end_time: "",
         staff: "",
         notes: ""
       },
       defaultItem: {
         name: "",
         location: "",
+        date: "",
         time: "",
+        end_date: "",
+        end_time: "",
         staff: "",
         notes: ""
       }
     };
+  },
+  created() {
+    this.days = this.createDaysModel();
   },
   computed: {
     formTitle() {
@@ -267,6 +448,41 @@ export default {
     }
   },
   methods: {
+    createDaysModel(){
+      let model = [];
+      for(let i = 1; i < 32; i++){
+        let day = {
+          name: i,
+          value: i,
+        };
+        model.push(day);
+      }
+      return model;
+    },
+    createYearModel(){
+      let year = 2019;
+      let model = [];
+      for(let i = 1; i < 50; i++){
+        let year_model = {
+          name: year,
+          value: year,
+        };
+        year++;
+        model.push(year_model);
+      }
+      return model;
+    },
+    createTasksModel(){
+      let model = [];
+      for(let i = 1; i < 10; i++){
+        let task_model = {
+          name: ("Task " + String(i)),
+          value: i,
+        };
+        model.push(task_model);
+      }
+      return model;
+    },
     goToMonth: function(increment) {
       let newMonth = (this.currentMonth += increment);
       // Sanity checks now...
@@ -318,6 +534,6 @@ export default {
 <style scoped>
 .rgu-add-btn {
   top: 80%;
-  left: 95%;
+  left: 92%;
 }
 </style>

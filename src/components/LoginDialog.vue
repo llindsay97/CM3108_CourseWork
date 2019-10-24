@@ -1,14 +1,24 @@
 <template>
   <v-dialog v-model="dialog" max-width="600px">
     <template v-slot:activator="{ on }">
-      <v-btn v-if="!isLoggedIn" color="white" class="font-weight-bold" text v-on="on">Log in</v-btn>
+      <v-btn
+        v-if="!isLoggedIn"
+        color="white"
+        class="font-weight-bold"
+        text
+        v-on="on"
+      >
+        <v-icon left>person</v-icon>
+        Log in</v-btn>
       <v-btn
         v-if="isLoggedIn"
         v-on:click="logOut"
         color="white"
         class="font-weight-bold"
         text
-      >Log out</v-btn>
+      >
+        <v-icon left>logout</v-icon>
+        Log out</v-btn>
     </template>
     <v-card>
       <v-card-title>

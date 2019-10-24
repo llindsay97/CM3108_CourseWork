@@ -8,12 +8,7 @@
   import Calendar from "../components/Calendar";
 
   export default {
-    name: "Welcome",
-    data(){
-      return {
-
-      }
-    },
+    name: "Calendar",
     components: {
       "rgu-calendar": Calendar
     }

@@ -24,7 +24,6 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <loginDialog />
-      <RegisterDialog />
     </v-app-bar>
   </div>
 </template>
@@ -43,6 +42,7 @@ export default {
       drawer: null,
       items: [
         { icon: "home", text: "Home", route: "/home" },
+        { icon: "calendar_today", text: "Calendar", route: "/calendar" },
         { icon: "note", text: "Events", route: "/events" },
         { icon: "people", text: "Staff", route: "/staff" },
         { icon: "help", text: "Help", route: "/help" }

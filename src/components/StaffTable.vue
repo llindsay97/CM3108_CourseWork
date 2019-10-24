@@ -1,9 +1,16 @@
 <template>
   <v-card style="width: 100%;">
     <v-card-title>
-      <span class="pr-3" style="min-width: 26%;">Staff</span>
+      <span class="pr-3"
+            style="min-width: 26%;
+                   font-family: 'Times New Roman', serif;
+                   font-size: 32px;
+                   margin-top: -10px;"
+      >
+        Staff
+      </span>
       <v-spacer></v-spacer>
-      <v-text-field append-icon="search" label="Search" single-line hide-details v-model="search"></v-text-field>
+      <v-text-field append-icon="search" label="Search" dense single-line v-model="search"></v-text-field>
     </v-card-title>
     <v-data-table
       :height="300"
@@ -16,8 +23,14 @@
       <template v-slot:top>
         <v-dialog v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }">
-            <v-btn color="pink" dark fab fixed right class="rgu-add-btn" v-on="on">
-              <v-icon>mdi-plus</v-icon>
+            <v-btn
+              color="primary"
+              dark
+              fixed
+              right
+              class="rgu-add-btn"
+              v-on="on">
+              <v-icon>add_person</v-icon>
             </v-btn>
           </template>
           <v-card>
@@ -264,6 +277,6 @@ export default {
 <style scoped>
 .rgu-add-btn {
   top: 80%;
-  left: 95%;
+  left: 92%;
 }
 </style>

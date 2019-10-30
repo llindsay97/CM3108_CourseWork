@@ -5,6 +5,7 @@ import Home from "./views/Home.vue";
 import Events from "./views/Events.vue";
 import Staff from "./views/Staff.vue";
 import Help from "./views/Help.vue";
+import Profile from "./views/Profile.vue";
 import store from "./store";
 import Calendar from "./views/Calendar";
 
@@ -43,6 +44,11 @@ const router = new Router({
       path: "/help",
       name: "help",
       component: Help
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: Profile
     },
     {
       path: "/about",

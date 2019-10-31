@@ -223,7 +223,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "EventsTable",
@@ -309,6 +309,7 @@ export default {
   },
   mounted() {
     this.days = this.createDaysModel();
+    this.retrieveEvents();
   },
   computed: {
     ...mapGetters({ items: "getEvents" }),
@@ -322,6 +323,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["retrieveEvents"]),
     createDaysModel() {
       let model = [];
       for (let i = 1; i < 32; i++) {

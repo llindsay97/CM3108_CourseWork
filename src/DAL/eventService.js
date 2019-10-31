@@ -43,8 +43,14 @@ var eventService = {
   },
   archiveEvent: event => {
     db.collection('events')
-      .doc()
-      .set({ is_deleted: true }, { merge: true });
+      .doc(event.id)
+      .set({ is_deleted: true }, { merge: true })
+      .then(() => {
+        console.log('Event: ' + event.id + ' has been archived');
+      })
+      .catch(error => {
+        console.log('Error archiving event: ' + error);
+      });
   },
 };
 

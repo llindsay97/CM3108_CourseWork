@@ -6,7 +6,7 @@ import Events from "./views/Events.vue";
 import Staff from "./views/Staff.vue";
 import Help from "./views/Help.vue";
 import Profile from "./views/Profile.vue";
-import store from "./store";
+import store from "./state/store";
 import Calendar from "./views/Calendar";
 
 Vue.use(Router);

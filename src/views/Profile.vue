@@ -17,7 +17,7 @@
             <h2 class="card-title text-gray font-weight-bold mb-1 mt-2">Course & Year</h2>
             <h3 class="category text-gray font-weight-light mb-1">Computer Science Bsc - Year 3</h3> <!-- {{profile.course}} , {{profile.courseyear}} -->
             <h2 class="card-title text-gray font-weight-bold mb-1 mt-2">Student Information</h2>
-            <p class="card-description text-gray font-weight-light mb-1">
+            <p class="card-description text-gray font-weight-light">
               Phone Number - 07712858212 <br> <!-- {{profile.phone}} -->
               Email - 1607094@rgu.ac.uk <br> <!-- {{profile.email}} -->
               Sex - Male <!-- {{profile.gender }} -->

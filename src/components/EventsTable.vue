@@ -6,42 +6,12 @@
         style="min-width: 10%;
                font-family: 'Times New Roman', serif;
                font-size: 32px; margin-top: -10px;"
-      >
-        Events for:
-      </span>
-      <v-select
-        :items="days"
-        placeholder="Day"
-        dense
-        item-text="name"
-        style="max-width: 15%;"
-      ></v-select>
-      <v-select
-        :items="months"
-        placeholder="Month"
-        dense
-        item-text="name"
-        style="max-width: 15%;"
-      ></v-select>
-      <v-select
-        :items="years"
-        placeholder="Year"
-        dense
-        item-text="name"
-        style="max-width: 15%;"
-      ></v-select>
-      <v-btn
-        class="primary"
-        style="margin-top: -15px; margin-left: 10px; margin-right: 10px;"
-      >
-        APPLY
-      </v-btn>
-      <v-btn
-        class="primary"
-        style="margin-top: -15px;"
-      >
-        RESET
-      </v-btn>
+      >Events for:</span>
+      <v-select :items="days" placeholder="Day" dense item-text="name" style="max-width: 15%;"></v-select>
+      <v-select :items="months" placeholder="Month" dense item-text="name" style="max-width: 15%;"></v-select>
+      <v-select :items="years" placeholder="Year" dense item-text="name" style="max-width: 15%;"></v-select>
+      <v-btn class="primary" style="margin-top: -15px; margin-left: 10px; margin-right: 10px;">APPLY</v-btn>
+      <v-btn class="primary" style="margin-top: -15px;">RESET</v-btn>
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" dense single-line v-model="search"></v-text-field>
     </v-card-title>
@@ -56,13 +26,7 @@
       <template v-slot:top>
         <v-dialog v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }">
-            <v-btn
-              color="primary"
-              dark
-              fixed
-              right
-              class="rgu-add-btn"
-              v-on="on">
+            <v-btn color="primary" dark fixed right class="rgu-add-btn" v-on="on">
               <v-icon>add_event</v-icon>
             </v-btn>
           </template>
@@ -75,7 +39,11 @@
               <v-container>
                 <v-row>
                   <v-col class="align-center justify-space-between" cols="6">
-                    <v-text-field v-model="editedItem.name" prepend-icon="date_range" placeholder="Name"></v-text-field>
+                    <v-text-field
+                      v-model="editedItem.name"
+                      prepend-icon="date_range"
+                      placeholder="Name"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="6">
                     <v-text-field
@@ -106,7 +74,11 @@
                       <v-date-picker v-model="editedItem.date" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="date_menu = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.date_menu.save(editedItem.date)">OK</v-btn>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.date_menu.save(editedItem.date)"
+                        >OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-col>
@@ -131,14 +103,14 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-time-picker
-                        v-if="time_menu"
-                        v-model="editedItem.time"
-                        full-width
-                      >
+                      <v-time-picker v-if="time_menu" v-model="editedItem.time" full-width>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="time_menu = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.time_menu.save(editedItem.time)">OK</v-btn>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.time_menu.save(editedItem.time)"
+                        >OK</v-btn>
                       </v-time-picker>
                     </v-menu>
                   </v-col>
@@ -164,7 +136,11 @@
                       <v-date-picker v-model="editedItem.end_date" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="end_date_menu = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.end_date_menu.save(editedItem.end_date)">OK</v-btn>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.end_date_menu.save(editedItem.end_date)"
+                        >OK</v-btn>
                       </v-date-picker>
                     </v-menu>
                   </v-col>
@@ -189,14 +165,14 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-time-picker
-                        v-if="end_time_menu"
-                        v-model="editedItem.end_time"
-                        full-width
-                      >
+                      <v-time-picker v-if="end_time_menu" v-model="editedItem.end_time" full-width>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="end_time_menu = false">Cancel</v-btn>
-                        <v-btn text color="primary" @click="$refs.end_time_menu.save(editedItem.end_time)">OK</v-btn>
+                        <v-btn
+                          text
+                          color="primary"
+                          @click="$refs.end_time_menu.save(editedItem.end_time)"
+                        >OK</v-btn>
                       </v-time-picker>
                     </v-menu>
                   </v-col>
@@ -247,6 +223,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "EventsTable",
   data() {
@@ -282,136 +260,29 @@ export default {
       pagination: {},
       headers: [
         { text: "Name", align: "center", sortable: false, value: "name" },
-        { text: "Location", align: "center", sortable: false,  value: "location"},
+        {
+          text: "Location",
+          align: "center",
+          sortable: false,
+          value: "location"
+        },
         { text: "Start Date", align: "center", sortable: false, value: "date" },
         { text: "Start Time", align: "center", sortable: false, value: "time" },
-        { text: "End Date", align: "center", sortable: false, value: "end_date" },
-        { text: "End Time", align: "center", sortable: false, value: "end_time" },
+        {
+          text: "End Date",
+          align: "center",
+          sortable: false,
+          value: "end_date"
+        },
+        {
+          text: "End Time",
+          align: "center",
+          sortable: false,
+          value: "end_time"
+        },
         { text: "Staff", align: "center", sortable: false, value: "staff" },
         { text: "Tasks", align: "center", sortable: false, value: "tasks" },
         { text: "Actions", sortable: false, value: "action" }
-      ],
-      items: [
-        {
-          _id: "1",
-          name: "Project Management Lecture",
-          location: "room N117",
-          date: "2019-10-23",
-          time: "2:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "2",
-          name: "Project Management Laboratory",
-          location: "room N533",
-          date: "2019-10-23",
-          time: "3:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "3",
-          name: "Project Management Lecture",
-          location: "room N117",
-          date: "2019-10-23",
-          time: "2:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "4",
-          name: "Project Management Laboratory",
-          location: "room N533",
-          date: "2019-10-23",
-          time: "3:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "5",
-          name: "Project Management Lecture",
-          location: "room N117",
-          date: "2019-10-23",
-          time: "2:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "6",
-          name: "Project Management Laboratory",
-          location: "room N533",
-          date: "2019-10-23",
-          time: "3:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "7",
-          name: "Project Management Lecture",
-          location: "room N117",
-          date: "2019-10-23",
-          time: "2:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "8",
-          name: "Project Management Laboratory",
-          location: "room N533",
-          date: "2019-10-23",
-          time: "3:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "9",
-          name: "Project Management Lecture",
-          location: "room N117",
-          date: "2019-10-23",
-          time: "2:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        },
-        {
-          _id: "10",
-          name: "Project Management Laboratory",
-          location: "room N533",
-          date: "2019-10-23",
-          time: "3:00",
-          end_date: "2019-10-23",
-          end_time: "3:00",
-          staff: "Tiffany Young",
-          tasks: "Client Meeting",
-          notes: ""
-        }
       ],
       editedIndex: -1,
       editedItem: {
@@ -436,10 +307,11 @@ export default {
       }
     };
   },
-  created() {
+  mounted() {
     this.days = this.createDaysModel();
   },
   computed: {
+    ...mapGetters({ items: "getEvents" }),
     formTitle() {
       return this.editedIndex === -1 ? "New Event" : "Edit Event";
     }
@@ -450,36 +322,36 @@ export default {
     }
   },
   methods: {
-    createDaysModel(){
+    createDaysModel() {
       let model = [];
-      for(let i = 1; i < 32; i++){
+      for (let i = 1; i < 32; i++) {
         let day = {
           name: i,
-          value: i,
+          value: i
         };
         model.push(day);
       }
       return model;
     },
-    createYearModel(){
+    createYearModel() {
       let year = 2019;
       let model = [];
-      for(let i = 1; i < 50; i++){
+      for (let i = 1; i < 50; i++) {
         let year_model = {
           name: year,
-          value: year,
+          value: year
         };
         year++;
         model.push(year_model);
       }
       return model;
     },
-    createTasksModel(){
+    createTasksModel() {
       let model = [];
-      for(let i = 1; i < 10; i++){
+      for (let i = 1; i < 10; i++) {
         let task_model = {
-          name: ("Task " + String(i)),
-          value: i,
+          name: "Task " + String(i),
+          value: i
         };
         model.push(task_model);
       }

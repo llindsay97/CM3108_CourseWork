@@ -70,11 +70,12 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                    <v-text-field
+                    <v-select
                       v-model="editedItem.permission_level"
+                      :items="permission_levels"
                       prepend-icon="security"
                       placeholder="Permission Level"
-                    ></v-text-field>
+                    ></v-select>
                   </v-col>
                 </v-row>
               </v-container>
@@ -83,7 +84,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="save(item)">Save</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -102,6 +103,8 @@
 </template>
 
 <script>
+  import { db } from "../main.js"
+
 export default {
   name: "EventsTable",
   data() {
@@ -134,88 +137,8 @@ export default {
         },
         { text: "Actions", sortable: false, value: "action" }
       ],
-      items: [
-        {
-          _id: "1",
-          first_name: "Tiffany",
-          last_name: "Young",
-          email: "t.young@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "2",
-          first_name: "Mark",
-          last_name: "Zarb",
-          email: "m.zarb@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "3",
-          first_name: "Tiffany",
-          last_name: "Young",
-          email: "t.young@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "4",
-          first_name: "Mark",
-          last_name: "Zarb",
-          email: "m.zarb@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "5",
-          first_name: "Tiffany",
-          last_name: "Young",
-          email: "t.young@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "6",
-          first_name: "Mark",
-          last_name: "Zarb",
-          email: "m.zarb@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "7",
-          first_name: "Tiffany",
-          last_name: "Young",
-          email: "t.young@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "8",
-          first_name: "Mark",
-          last_name: "Zarb",
-          email: "m.zarb@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "9",
-          first_name: "Tiffany",
-          last_name: "Young",
-          email: "t.young@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        },
-        {
-          _id: "10",
-          first_name: "Mark",
-          last_name: "Zarb",
-          email: "m.zarb@rgu.ac.uk",
-          job: "Lecturer",
-          permission_level: "System Operator"
-        }
-      ],
+      items: [],
+      permission_levels: ["System Operator", "Administrator"],
       editedIndex: -1,
       editedItem: {
         first_name: "",
@@ -243,7 +166,62 @@ export default {
       val || this.close();
     }
   },
+  mounted(){
+    this.getStaff();
+  },
   methods: {
+    async getStaff(){
+      let snapshot = await db.collection("staff").where("is_deleted", "==", false).get();
+      let staff = [];
+      snapshot.forEach(doc => {
+        let appData = doc.data();
+        appData.id = doc.id;
+        if(appData.permission_level === 1){
+          appData.permission_level = "Administrator";
+        }
+        if(appData.permission_level === 2){
+          appData.permission_level = "System Operator";
+        }
+        staff.push(appData);
+        console.log(appData)
+      });
+      this.items = staff;
+    },
+    async addStaff(){
+      if(this.editedItem.permission_level === "System Operator"){
+        this.editedItem.permission_level = 2;
+      }
+      if(this.editedItem.permission_level === "Administrator"){
+        this.editedItem.permission_level = 1;
+      }
+      await db.collection("staff").add({
+        first_name: this.editedItem.first_name,
+        last_name: this.editedItem.last_name,
+        email: this.editedItem.email,
+        job: this.editedItem.job,
+        permission_level: this.editedItem.permission_level,
+        is_deleted: false
+      });
+      this.getStaff();
+    },
+    async updateStaff(item){
+      await db.collection("staff").doc(this.editedItem.id).update({
+        first_name: this.editedItem.first_name,
+        last_name: this.editedItem.last_name,
+        email: this.editedItem.email,
+        job: this.editedItem.job,
+        permission_level: this.editedItem.permission_level,
+      });
+      this.getStaff();
+      this.close();
+
+    },
+    async deleteStaff(item){
+      await db.collection("staff").doc(this.editedItem.id).update({
+        is_deleted: true,
+      });
+      this.getStaff();
+    },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
@@ -251,9 +229,17 @@ export default {
       console.log(this.dialog);
     },
     deleteItem(item) {
-      const index = this.items.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
-        this.items.splice(index, 1);
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      let response = confirm("Are you sure you want to delete this item?");
+      if(response){
+        this.deleteStaff(item);
+      }
+      this.editedItem.first_name = "";
+      this.editedItem.last_name = "";
+      this.editedItem.email_name = "";
+      this.editedItem.job = "";
+      this.editedItem.permission_level = "";
     },
     close() {
       this.dialog = false;
@@ -262,11 +248,11 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
+    save(item) {
+      if(this.editedIndex > -1){
+        this.updateStaff(item);
       } else {
-        this.items.push(this.editedItem);
+        this.addStaff();
       }
       this.close();
     }

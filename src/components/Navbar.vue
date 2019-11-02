@@ -42,6 +42,7 @@ export default {
       drawer: null,
       items: [
         { icon: "home", text: "Home", route: "/home" },
+        { icon: "people", text: "Profile", route: "/profile" },
         { icon: "calendar_today", text: "Calendar", route: "/calendar" },
         { icon: "note", text: "Events", route: "/events" },
         { icon: "people", text: "Staff", route: "/staff" },
@@ -55,6 +56,9 @@ export default {
       this.isLoggedIn = false;
     }
     if (this.$route.path === "/home") {
+      this.isLoggedIn = true;
+    }
+    if (this.$route.path === "/profile") {
       this.isLoggedIn = true;
     }
     if (this.$route.path === "/events") {

@@ -3,11 +3,12 @@
 
 
 <template>
-  <v-container fill-height fluid grid-list-xl>
+  <v-container fill-height fluid grid-list-xl justify-center>
     <v-layout justify-center wrap>
-      <h1 class="purple--text">Your Profile</h1>
+      
       <v-flex xs12 md4>
         <material-card class="v-card-profile purple--text">
+          <h1 class="purple--text text-center">Your Profile</h1>
           <v-avatar slot="offset" class="mx-auto d-block pt-5 mt-5" size="120">
             <img src="https://cdn.pixabay.com/photo/2017/02/23/13/05/profile-2092113_960_720.png">
           </v-avatar>

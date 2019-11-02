@@ -1,9 +1,9 @@
-import Vue from 'vue'
+ import Vue from 'vue'
 import './plugins/axios'
+import store from './state/store'
 import App from './App.vue'
 import router from './router'
 import vuetify from './plugins/vuetify';
-import store from './store'
 import VueTextareaAutosize from "vue-textarea-autosize";
 import firebase from "firebase/app";
 import "firebase/firestore";

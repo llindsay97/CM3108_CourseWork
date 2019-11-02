@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <h1>Welcome</h1>
-  </div>
+<v-container>
+   <v-flex xs12>
+        <v-img :src="require('../assets/csdmlogo.png')" class="my-3" contain height="200"></v-img>
+      </v-flex>
+        </v-container>
 </template>
 
 <script>

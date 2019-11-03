@@ -15,15 +15,11 @@
       <v-spacer></v-spacer>
       <v-text-field append-icon="search" label="Search" dense single-line v-model="search"></v-text-field>
     </v-card-title>
-    <v-data-table
-      :height="300"
-      v-bind:headers="headers"
-      v-bind:items="items"
-      v-bind:search="search"
-      :items-per-page="5"
-      item-key="_id"
-    >
-      <template v-slot:top>
+
+    <v-list two-line
+            style="max-height: 350px;"
+            class="overflow-y-auto">
+      <template>
         <v-dialog v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark fixed right class="rgu-add-btn" v-on="on">
@@ -57,27 +53,27 @@
                       ref="date_menu"
                       v-model="date_menu"
                       :close-on-content-click="false"
-                      :return-value.sync="editedItem.date"
+                      :return-value.sync="editedItem.start"
                       transition="scale-transition"
                       offset-y
                       min-width="290px"
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          v-model="editedItem.date"
+                          v-model="editedItem.start"
                           label="Start Date"
                           prepend-icon="event"
                           readonly
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="editedItem.date" no-title scrollable>
+                      <v-date-picker v-model="editedItem.start" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="date_menu = false">Cancel</v-btn>
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.date_menu.save(editedItem.date)"
+                          @click="$refs.date_menu.save(editedItem.start)"
                         >OK</v-btn>
                       </v-date-picker>
                     </v-menu>
@@ -88,7 +84,7 @@
                       v-model="time_menu"
                       :close-on-content-click="false"
                       :nudge-right="40"
-                      :return-value.sync="editedItem.time"
+                      :return-value.sync="editedItem.start_time"
                       transition="scale-transition"
                       offset-y
                       max-width="290px"
@@ -96,20 +92,20 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          v-model="editedItem.time"
+                          v-model="editedItem.start_time"
                           label="Start Time"
                           prepend-icon="access_time"
                           readonly
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-time-picker v-if="time_menu" v-model="editedItem.time" full-width>
+                      <v-time-picker v-if="time_menu" v-model="editedItem.start_time" full-width>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="time_menu = false">Cancel</v-btn>
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.time_menu.save(editedItem.time)"
+                          @click="$refs.time_menu.save(editedItem.start_time)"
                         >OK</v-btn>
                       </v-time-picker>
                     </v-menu>
@@ -119,27 +115,27 @@
                       ref="end_date_menu"
                       v-model="end_date_menu"
                       :close-on-content-click="false"
-                      :return-value.sync="editedItem.end_date"
+                      :return-value.sync="editedItem.end"
                       transition="scale-transition"
                       offset-y
                       min-width="290px"
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          v-model="editedItem.end_date"
+                          v-model="editedItem.end"
                           label="End Date"
                           prepend-icon="event"
                           readonly
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="editedItem.end_date" no-title scrollable>
+                      <v-date-picker v-model="editedItem.end" no-title scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="end_date_menu = false">Cancel</v-btn>
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.end_date_menu.save(editedItem.end_date)"
+                          @click="$refs.end_date_menu.save(editedItem.end)"
                         >OK</v-btn>
                       </v-date-picker>
                     </v-menu>
@@ -213,203 +209,241 @@
         <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
         <v-icon small @click="deleteItem(item)">delete</v-icon>
       </template>
+      <v-list-item-group
+        v-model="selected"
+        multiple
+        active-class="primary--text"
+      >
+        <template v-for="(item, index) in filteredEvents">
+          <v-list-item :key="item.name">
+            <template v-slot:default="{ active, toggle }">
+              <v-list-item-content>
+                <v-list-item-title>
+                  <v-row>
+                    <v-col cols="1">
+                      Name:
+                    </v-col>
+                    <v-col cols="11">
+                      {{item.name}}
+                    </v-col>
+                  </v-row>
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="1">
+                      Location:
+                    </v-col>
+                    <v-col cols="11">
+                      {{item.location}}
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="1">
+                      Start:
+                    </v-col>
+                    <v-col cols="11">
+                      {{item.start}} {{item.start_time}}
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="1">
+                      End:
+                    </v-col>
+                    <v-col cols="11">
+                      {{item.end}} {{item.end_time}}
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="1">
+                      Staff:
+                    </v-col>
+                    <v-col cols="11">
+                      {{item.staff}}
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="1">
+                      Tasks:
+                    </v-col>
+                    <v-col cols="11">
+                      {{item.tasks}}
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+                <v-list-item-subtitle>
+                  <v-row>
+                    <v-col cols="1">
+                      Notes:
+                    </v-col>
+                    <v-col cols="11">
+                      {{item.notes}}
+                    </v-col>
+                  </v-row>
+                </v-list-item-subtitle>
+              </v-list-item-content>
 
-      <template
-        slot="pageText"
-        slot-scope="{ pageStart, pageStop}"
-      >from {{pageStart}} to {{pageStop}}</template>
-    </v-data-table>
+              <v-list-item-action>
+                <v-icon
+                  color="mr-2"
+                  @click="editItem(item)"
+                >
+                  edit
+                </v-icon>
+              </v-list-item-action>
+              <v-list-item-action>
+                <v-icon
+                  @click="deleteItem(item)"
+                >
+                  delete
+                </v-icon>
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+
+          <v-divider
+            v-if="index + 1 < items.length"
+            :key="index"
+          ></v-divider>
+        </template>
+      </v-list-item-group>
+    </v-list>
   </v-card>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+  import {mapGetters} from "vuex";
 
-export default {
-  name: "EventsTable",
-  data() {
-    return {
-      dialog: false,
-      date_menu: false,
-      time_menu: false,
-      end_date_menu: false,
-      end_time_menu: false,
-      days: [],
-      months: [
-        { name: "January", abrev: "Jan", index: 1 },
-        { name: "February", abrev: "Feb", index: 2 },
-        { name: "March", abrev: "Mar", index: 3 },
-        { name: "April", abrev: "Apr", index: 4 },
-        { name: "May", abrev: "May", index: 5 },
-        { name: "June", abrev: "Jun", index: 6 },
-        { name: "July", abrev: "Jul", index: 7 },
-        { name: "August", abrev: "Aug", index: 8 },
-        { name: "September", abrev: "Sep", index: 9 },
-        { name: "October", abrev: "Oct", index: 10 },
-        { name: "November", abrev: "Nov", index: 11 },
-        { name: "December", abrev: "Dec", index: 12 }
-      ],
-      years: this.createYearModel(),
-      tasks: "",
-      currentMonth: 10,
-      currentYear: 2019,
-      search: "",
-      snack: false,
-      snackColor: "",
-      snackText: "",
-      pagination: {},
-      headers: [
-        { text: "Name", align: "center", sortable: false, value: "name" },
-        {
-          text: "Location",
-          align: "center",
-          sortable: false,
-          value: "location"
+  export default {
+    name: "EventsListView",
+    data() {
+      return {
+        dialog: false,
+        date_menu: false,
+        time_menu: false,
+        end_date_menu: false,
+        end_time_menu: false,
+        days: this.createDaysModel(),
+        months: [
+          { name: "January", abrev: "Jan", index: 1 },
+          { name: "February", abrev: "Feb", index: 2 },
+          { name: "March", abrev: "Mar", index: 3 },
+          { name: "April", abrev: "Apr", index: 4 },
+          { name: "May", abrev: "May", index: 5 },
+          { name: "June", abrev: "Jun", index: 6 },
+          { name: "July", abrev: "Jul", index: 7 },
+          { name: "August", abrev: "Aug", index: 8 },
+          { name: "September", abrev: "Sep", index: 9 },
+          { name: "October", abrev: "Oct", index: 10 },
+          { name: "November", abrev: "Nov", index: 11 },
+          { name: "December", abrev: "Dec", index: 12 }
+        ],
+        years: this.createYearModel(),
+        selected: [2],
+        search: "",
+        editedIndex: -1,
+        editedItem: {
+          name: "",
+          location: "",
+          start: "",
+          start_time: "",
+          end_date: "",
+          end_time: "",
+          staff: "",
+          notes: ""
         },
-        { text: "Start Date", align: "center", sortable: false, value: "start" },
-        { text: "Start Time", align: "center", sortable: false, value: "start_time" },
-        {
-          text: "End Date",
-          align: "center",
-          sortable: false,
-          value: "end"
-        },
-        {
-          text: "End Time",
-          align: "center",
-          sortable: false,
-          value: "end_time"
-        },
-        { text: "Staff", align: "center", sortable: false, value: "staff" },
-        { text: "Tasks", align: "center", sortable: false, value: "tasks" },
-        { text: "Actions", sortable: false, value: "action" }
-      ],
-      editedIndex: -1,
-      editedItem: {
-        name: "",
-        location: "",
-        date: "",
-        time: "",
-        end_date: "",
-        end_time: "",
-        staff: "",
-        notes: ""
+        defaultItem: {
+          name: "",
+          location: "",
+          start: "",
+          start_time: "",
+          end: "",
+          end_time: "",
+          staff: "",
+          notes: ""
+        }
+      }
+    },
+    computed: {
+      ...mapGetters({ items: "getEvents" }),
+      formTitle() {
+        return this.editedIndex === -1 ? "New Event" : "Edit Event";
       },
-      defaultItem: {
-        name: "",
-        location: "",
-        date: "",
-        time: "",
-        end_date: "",
-        end_time: "",
-        staff: "",
-        notes: ""
+      filteredEvents(){
+        if(this.search){
+          return this.items.filter((item) => {
+            return item.name.toLowerCase().match(this.search.toLowerCase());
+          });
+        } else {
+          return this.items;
+        }
       }
-    };
-  },
-  mounted() {
-    this.days = this.createDaysModel();
-    this.retrieveEvents();
-  },
-  computed: {
-    ...mapGetters({ items: "getEvents" }),
-    formTitle() {
-      return this.editedIndex === -1 ? "New Event" : "Edit Event";
-    }
-  },
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
-  methods: {
-    ...mapActions(["retrieveEvents"]),
-    createDaysModel() {
-      let model = [];
-      for (let i = 1; i < 32; i++) {
-        let day = {
-          name: i,
-          value: i
-        };
-        model.push(day);
-      }
-      return model;
     },
-    createYearModel() {
-      let year = 2019;
-      let model = [];
-      for (let i = 1; i < 50; i++) {
-        let year_model = {
-          name: year,
-          value: year
-        };
-        year++;
-        model.push(year_model);
-      }
-      return model;
-    },
-    createTasksModel() {
-      let model = [];
-      for (let i = 1; i < 10; i++) {
-        let task_model = {
-          name: "Task " + String(i),
-          value: i
-        };
-        model.push(task_model);
-      }
-      return model;
-    },
-    goToMonth: function(increment) {
-      let newMonth = (this.currentMonth += increment);
-      // Sanity checks now...
-      if (newMonth > 12) {
-        newMonth = 1;
-        this.currentYear += 1;
-      } else if (newMonth < 1) {
-        newMonth = 12;
-        this.currentYear -= 1;
-      }
-
-      this.currentMonth = newMonth;
-    },
-    goToCurrentMonth: function() {
-      let dt = new Date(Date.now());
-      this.currentMonth = dt.getUTCMonth() + 1;
-      this.currentYear = dt.getUTCFullYear();
-    },
-    editItem(item) {
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-      console.log(this.dialog);
-    },
-    deleteItem(item) {
-      const index = this.items.indexOf(item);
-      confirm("Are you sure you want to delete this item?") &&
+    methods: {
+      createDaysModel() {
+        let model = [];
+        for (let i = 1; i < 32; i++) {
+          let day = {
+            name: i,
+            value: i
+          };
+          model.push(day);
+        }
+        return model;
+      },
+      createYearModel() {
+        let year = 2019;
+        let model = [];
+        for (let i = 1; i < 50; i++) {
+          let year_model = {
+            name: year,
+            value: year
+          };
+          year++;
+          model.push(year_model);
+        }
+        return model;
+      },
+      editItem(item) {
+        this.editedIndex = this.items.indexOf(item);
+        this.editedItem = Object.assign({}, item);
+        this.dialog = true;
+        console.log(this.dialog);
+      },
+      deleteItem(item) {
+        const index = this.items.indexOf(item);
+        confirm("Are you sure you want to delete this item?") &&
         this.items.splice(index, 1);
-    },
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.editedItem);
-      } else {
-        this.items.push(this.editedItem);
+      },
+      close() {
+        this.dialog = false;
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem);
+          this.editedIndex = -1;
+        }, 300);
+      },
+      save() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.items[this.editedIndex], this.editedItem);
+        } else {
+          this.items.push(this.editedItem);
+        }
+        this.close();
       }
-      this.close();
     }
   }
-};
 </script>
 
 <style scoped>
-.rgu-add-btn {
-  top: 80%;
-  left: 92%;
-}
+  .rgu-add-btn {
+    top: 80%;
+    left: 92%;
+  }
 </style>

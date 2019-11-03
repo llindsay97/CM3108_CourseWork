@@ -11,13 +11,13 @@ import "firebase/firestore";
 Vue.use(VueTextareaAutosize);
 Vue.config.productionTip = false
 firebase.initializeApp({
-  apiKey: "AIzaSyCzWpUb1m6GC4gew_mMWInqsUIx0Byx7h8",
-  authDomain: "rguevents.firebaseapp.com",
-  databaseURL: "https://rguevents.firebaseio.com",
-  projectId: "rguevents",
-  storageBucket: "rguevents.appspot.com",
-  messagingSenderId: "225833524224",
-  appId: "1:225833524224:web:949e3075e500ab29084ce5"
+  apiKey: "AIzaSyCi1YB74TrzrHesqaz7dMfh2v5d3oEuBGE",
+  authDomain: "rguevents-c4844.firebaseapp.com",
+  databaseURL: "https://rguevents-c4844.firebaseio.com",
+  projectId: "rguevents-c4844",
+  storageBucket: "rguevents-c4844.appspot.com",
+  messagingSenderId: "944070025508",
+  appId: "1:944070025508:web:20358e27c7c85e105313b1"
 });
 
 export const db = firebase.firestore();

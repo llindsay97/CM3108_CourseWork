@@ -42,8 +42,10 @@ export default {
       drawer: null,
       items: [
         { icon: "home", text: "Home", route: "/home" },
+        { icon: "account_box", text: "Profile", route: "/profile" },
         { icon: "calendar_today", text: "Calendar", route: "/calendar" },
         { icon: "note", text: "Events", route: "/events" },
+        { icon: "note", text: "Events List View", route: "/events-list-view" },
         { icon: "people", text: "Staff", route: "/staff" },
         { icon: "help", text: "Help", route: "/help" }
       ],
@@ -57,7 +59,16 @@ export default {
     if (this.$route.path === "/home") {
       this.isLoggedIn = true;
     }
+    if (this.$route.path === "/profile") {
+      this.isLoggedIn = true;
+    }
+    if (this.$route.path === "/calendar") {
+      this.isLoggedIn = true;
+    }
     if (this.$route.path === "/events") {
+      this.isLoggedIn = true;
+    }
+    if (this.$route.path === "/events-list-view") {
       this.isLoggedIn = true;
     }
     if (this.$route.path === "/staff") {

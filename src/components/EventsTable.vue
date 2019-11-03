@@ -266,13 +266,13 @@ export default {
           sortable: false,
           value: "location"
         },
-        { text: "Start Date", align: "center", sortable: false, value: "date" },
-        { text: "Start Time", align: "center", sortable: false, value: "time" },
+        { text: "Start Date", align: "center", sortable: false, value: "start" },
+        { text: "Start Time", align: "center", sortable: false, value: "start_time" },
         {
           text: "End Date",
           align: "center",
           sortable: false,
-          value: "end_date"
+          value: "end"
         },
         {
           text: "End Time",

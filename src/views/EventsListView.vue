@@ -1,10 +1,17 @@
 <template>
-  
+  <div>
+    <rgu-events-list/>
+  </div>
 </template>
 
 <script>
+  import EventsListView from "../components/EventsListView";
+
   export default {
-    name: "EventsListView"
+    name: "EventsListView",
+    components: {
+      "rgu-events-list": EventsListView
+    }
   }
 </script>
 

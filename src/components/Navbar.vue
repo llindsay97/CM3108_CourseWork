@@ -62,6 +62,9 @@ export default {
     if (this.$route.path === "/profile") {
       this.isLoggedIn = true;
     }
+    if (this.$route.path === "/calendar") {
+      this.isLoggedIn = true;
+    }
     if (this.$route.path === "/events") {
       this.isLoggedIn = true;
     }

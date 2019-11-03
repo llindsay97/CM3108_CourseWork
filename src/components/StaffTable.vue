@@ -106,7 +106,7 @@
   import { db } from "../main.js"
 
 export default {
-  name: "EventsTable",
+  name: "StaffTable",
   data() {
     return {
       dialog: false,

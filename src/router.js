@@ -8,6 +8,7 @@ import Help from "./views/Help.vue";
 import Profile from "./views/Profile.vue";
 import store from "./state/store";
 import Calendar from "./views/Calendar";
+import EventsListView from "./views/EventsListView";
 
 Vue.use(Router);
 
@@ -34,6 +35,11 @@ const router = new Router({
       path: "/events",
       name: "events",
       component: Events
+    },
+    {
+      path: "/events-list-view",
+      name: "events-list-view",
+      component: EventsListView
     },
     {
       path: "/staff",
